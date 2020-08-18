@@ -6,8 +6,8 @@ const genre = require("./logic")
 module.exports = (services) => {
 
     routes.get("/", genre.listGenre(services));
-    // routes.get("/genre/:id",movie.());
     //Authorized
+    routes.post("/",genre.addGenre(services));
     routes.put("/:id", genre.updateGenre(services));
     routes.delete("/:id", genre.deleteGenre(services));
 

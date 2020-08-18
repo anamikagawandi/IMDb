@@ -17,6 +17,25 @@ ${dbName}?retryWrites=true&w=majority`;
     }
 }
 
+
+const getDocuments = async (db, collection, filter, skip) => {
+    try {
+        let result = await db.collection(collection).find(filter).skip(skip).toArray();
+        return result
+    } catch (err) {
+        throw new Error(`Something went wrong: ${err}`);
+    }
+}
+
+const getDocumentById = async (db, collection, id) => {
+    try {
+        let result = await db.collection(collection).findOne({_id : id});
+        return result
+    } catch (err) {
+        throw new Error(`Something went wrong: ${err}`);
+    }
+}
+
 const insertDocuments = async (db, collection, data) => {
     try {
         let result = null;
@@ -34,15 +53,30 @@ const insertDocuments = async (db, collection, data) => {
     }
 }
 
-
-const getDocuments = async (db, collection, filter, skip) => {
+const updateDocument = async (db, collection, id, data) => {
     try {
-        let result = await db.collection(collection).find(filter).skip(skip).toArray();
-        return result
+        data["last_modified_date"] = new Date().getTime();
+        let result = await db.collection(collection).replaceOne({_id : id},data);
+        return `${result.modifiedCount} document updated`
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
     }
 }
+
+const deleteDocument = async (db, collection, id) => {
+    try {
+        let result = await db.collection(collection).updateOne({_id : id},
+             {$set: 
+                { 
+                    is_active: false,
+                    last_modified_date: new Date().getTime()
+                }});
+        return `${result.modifiedCount} document deleted`
+    } catch (err) {
+        throw new Error(`Something went wrong: ${err}`);
+    }
+}
+
 
 const getDistinct = async (db, collection, field) => {
     try {
@@ -56,34 +90,10 @@ const getDistinct = async (db, collection, field) => {
 
 module.exports = {
     getDB,
-    insertDocuments,
     getDocuments,
-    getDistinct
+    getDocumentById,
+    insertDocuments,
+    updateDocument,
+    deleteDocument,
+    getDistinct,
 }
-
-
-
-getDB().then(async (db) => {
-    let d = new Date().getTime();
-
-    let array = []
-
-
-    let g = await getDistinct(db, "movies", "genre")
-    console.log(g)
-
-    await g.forEach(element => {
-        let data = {
-            name: null,
-            is_active: true,
-            creation_date: d,
-            last_modified_date: d
-        }
-        data.name = element
-        array.push(data)
-    });
-
-console.log(array)
-    insertDocuments(db, "genre", array).then(e => console.log(e)).catch(err => console.error(err))
-    // db.close();
-})
