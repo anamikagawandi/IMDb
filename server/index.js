@@ -12,20 +12,21 @@ const db = require("./helper/mongodb")
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-let services = {
-    config: config,
-    db: null
+const services = {
+    config: config
 }
 
-db.getDB().then(db => services.db = db).catch(err => console.error(err));
+db.getDB().then(db => {
+    services["db"] = db;
+    app.use("/imdb", routes(services))
 
-app.use("/imdb",routes(services))
+    server.listen(3000, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Server started")
+        }
+    })
 
-
-server.listen(3000,(err) => {
-    if(err){
-        console.log(err);
-    }else{
-        console.log("Server started")
-    }
-})
+}
+).catch(err => console.error(err));

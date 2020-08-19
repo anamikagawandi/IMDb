@@ -1,7 +1,8 @@
 "use strict"
 
 const MongoClient = require('mongodb').MongoClient;
-const config = require("../config/index")
+const ObjectID = require('mongodb').ObjectID; 
+const config = require("../config/index");
 const dbName = config.mongodb.db;
 
 
@@ -18,10 +19,12 @@ ${dbName}?retryWrites=true&w=majority`;
 }
 
 
-const getDocuments = async (db, collection, filter, skip) => {
+const getDocuments = async (db, collection, filter, sort, limit, skip) => {
     try {
-        let result = await db.collection(collection).find(filter).skip(skip).toArray();
-        return result
+        let s = config.sortOrder;
+        if(sort)
+            s = sort
+        return db.collection(collection).find(filter).sort(s).limit(parseInt(limit)).skip(parseInt(skip)).toArray();
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
     }
@@ -29,8 +32,7 @@ const getDocuments = async (db, collection, filter, skip) => {
 
 const getDocumentById = async (db, collection, id) => {
     try {
-        let result = await db.collection(collection).findOne({_id : id});
-        return result
+        return db.collection(collection).findOne({_id : ObjectID(id)});
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
     }
@@ -44,10 +46,10 @@ const insertDocuments = async (db, collection, data) => {
             result = await db.collection(collection).insertMany(data, options);
         } else if (data) {
             result = await db.collection(collection).insertOne(data)
+            return `Document successfully inserted. Document id: ${result.insertedId}`
         } else {
             throw new Error("Invalid Data")
         }
-        return `${result.insertedCount} documents were inserted`;
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
     }
@@ -55,8 +57,11 @@ const insertDocuments = async (db, collection, data) => {
 
 const updateDocument = async (db, collection, id, data) => {
     try {
-        data["last_modified_date"] = new Date().getTime();
-        let result = await db.collection(collection).replaceOne({_id : id},data);
+        let document = {
+            $set: data
+          };
+        document.$set["last_modified_date"] = new Date().getTime();
+        let result = await db.collection(collection).updateOne({_id : ObjectID(id)},document);
         return `${result.modifiedCount} document updated`
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
@@ -65,7 +70,7 @@ const updateDocument = async (db, collection, id, data) => {
 
 const deleteDocument = async (db, collection, id) => {
     try {
-        let result = await db.collection(collection).updateOne({_id : id},
+        let result = await db.collection(collection).updateOne({_id : ObjectID(id)},
              {$set: 
                 { 
                     is_active: false,
