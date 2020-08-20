@@ -1,7 +1,7 @@
 "use strict"
 
 const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID; 
+const ObjectID = require('mongodb').ObjectID;
 const config = require("../config/index");
 const dbName = config.mongodb.db;
 
@@ -22,7 +22,7 @@ ${dbName}?retryWrites=true&w=majority`;
 const getDocuments = async (db, collection, filter, sort, limit, skip) => {
     try {
         let s = config.sortOrder;
-        if(sort)
+        if (sort)
             s = sort
         return db.collection(collection).find(filter).sort(s).limit(parseInt(limit)).skip(parseInt(skip)).toArray();
     } catch (err) {
@@ -32,7 +32,7 @@ const getDocuments = async (db, collection, filter, sort, limit, skip) => {
 
 const getDocumentById = async (db, collection, id) => {
     try {
-        return db.collection(collection).findOne({_id : ObjectID(id)});
+        return db.collection(collection).findOne({ _id: ObjectID(id) });
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
     }
@@ -59,9 +59,9 @@ const updateDocument = async (db, collection, id, data) => {
     try {
         let document = {
             $set: data
-          };
+        };
         document.$set["last_modified_date"] = new Date().getTime();
-        let result = await db.collection(collection).updateOne({_id : ObjectID(id)},document);
+        let result = await db.collection(collection).updateOne({ _id: ObjectID(id) }, document);
         return `${result.modifiedCount} document updated`
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
@@ -70,12 +70,14 @@ const updateDocument = async (db, collection, id, data) => {
 
 const deleteDocument = async (db, collection, id) => {
     try {
-        let result = await db.collection(collection).updateOne({_id : ObjectID(id)},
-             {$set: 
-                { 
+        let result = await db.collection(collection).updateOne({ _id: ObjectID(id) },
+            {
+                $set:
+                {
                     is_active: false,
                     last_modified_date: new Date().getTime()
-                }});
+                }
+            });
         return `${result.modifiedCount} document deleted`
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
@@ -92,6 +94,15 @@ const getDistinct = async (db, collection, field) => {
     }
 }
 
+const ifExists = async (db, collection, filter) => {
+    try {
+        let result = await db.collection(collection).find(filter).count();
+        return result
+    } catch (err) {
+        throw new Error(`Something went wrong: ${err}`);
+    }
+}
+
 
 module.exports = {
     getDB,
@@ -101,4 +112,5 @@ module.exports = {
     updateDocument,
     deleteDocument,
     getDistinct,
+    ifExists
 }
