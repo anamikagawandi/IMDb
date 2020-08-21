@@ -1,7 +1,7 @@
 module.exports = {
     mongodb:{
-        username: encodeURIComponent('anamikagawandi'),
-        password: encodeURIComponent('Jun@2020'),
+        username: encodeURIComponent(''),
+        password: encodeURIComponent(''),
         db: "imdb",
         defaultLimit: 10,
         sortOrder: {creation_date:-1}
