@@ -19,12 +19,36 @@ ${dbName}?retryWrites=true&w=majority`;
 }
 
 
-const getDocuments = async (db, collection, filter, sort, limit, skip) => {
+const getDocuments = async (db, collection, filter, sort, limit, skip, q) => {
     try {
         let s = config.sortOrder;
         if (sort)
             s = sort
-        return db.collection(collection).find(filter).sort(s).limit(parseInt(limit)).skip(parseInt(skip)).toArray();
+        if (filter && q) {
+            let regex = new RegExp(".*" + q + ".*", "i");
+            let query = { $or: [{ name: regex }, { director: regex }] };
+            return db.collection(collection).find({ $and: [query, filter, { is_active: true }] }).sort(s).limit(parseInt(limit)).skip(parseInt(skip)).toArray();
+        } else if(filter)
+            return db.collection(collection).find({ $and: [filter, { is_active: true }] }).sort(s).limit(parseInt(limit)).skip(parseInt(skip)).toArray();
+        else if(q){
+            let regex = new RegExp(".*" + q + ".*", "i");
+            let query = { $or: [{ name: regex }, { director: regex }] };
+            return db.collection(collection).find({ $and: [query, { is_active: true }] }).sort(s).limit(parseInt(limit)).skip(parseInt(skip)).toArray();
+        }
+        else
+            return db.collection(collection).find({ is_active: true }).sort(s).limit(parseInt(limit)).skip(parseInt(skip)).toArray();
+    } catch (err) {
+        throw new Error(`Something went wrong: ${err}`);
+    }
+}
+
+const search = async (db, collection, q) => {
+    try {
+        if (q) {
+            let regex = new RegExp(".*" + q + ".*", "i");
+            console.log(regex)
+            return db.collection(collection).find({ $or: [{ name: regex }, { director: regex }] }).toArray();
+        }
     } catch (err) {
         throw new Error(`Something went wrong: ${err}`);
     }
@@ -107,6 +131,7 @@ const ifExists = async (db, collection, filter) => {
 module.exports = {
     getDB,
     getDocuments,
+    search,
     getDocumentById,
     insertDocuments,
     updateDocument,

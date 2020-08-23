@@ -7,11 +7,12 @@ const server = http.createServer(app)
 const bodyParser = require("body-parser")
 const routes = require("./routes/v1/routes")
 const config = require("./config/index")
-const db = require("./helper/mongodb")
+const db = require("./helper/mongodb");
+var cors = require('cors');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-
+app.use(cors())
 const services = {
     config: config
 }

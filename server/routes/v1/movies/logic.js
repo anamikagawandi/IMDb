@@ -11,18 +11,36 @@ const listMovies = (services) => {
                 limit = req.query.limit;
                 skip = (req.query.page - 1) * limit;
             }
-            let filterObj = {
-                genre: { $all: [] }
-            };
-            if (req.query && req.query.filter) {
+            let filterObj = null;
+            if (req.query && req.query.filter  && req.query.filter !== "all") {
+                filterObj = {
+                    genre: { $all: [] }
+                };
                 filterObj.genre.$all = req.query.filter.split(",")
             }
             let sort = {}
             if (req.query && req.query.sort)
                 sort[req.query.sort] = parseInt(req.query.sortType) || 1
 
-            let result = await mongodb.getDocuments(services.db, collection, filterObj, sort, limit, skip);
+            let search = null;
+            if(req.query && req.query.q && req.query.q !== "null")
+                search = req.query.q;
+
+            let result = await mongodb.getDocuments(services.db, collection, filterObj, sort, limit, skip, search);
             res.status(200).json({ "count": result.length, "list": result })
+        } catch (err) {
+            console.error(err);
+        }
+    };
+}
+
+const search = (services) => {
+    return async (req, res, next) => {
+        try {
+            if(req.query && req.query.q){
+                let result = await mongodb.search(services.db, collection, req.query.q, sort, limit, skip);
+                res.status(200).json({ "count": result.length, "list": result })
+            }
         } catch (err) {
             console.error(err);
         }
@@ -87,6 +105,7 @@ const deleteMovie = (services) => {
 
 module.exports = {
     listMovies,
+    search,
     getMovieDetails,
     addMovie,
     updateMovie,

@@ -1,0 +1,49 @@
+<mat-toolbar color="primary">
+  <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+    *ngIf="isHandset$ | async">
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+  <span>IMDb</span>
+</mat-toolbar>
+<div class="utility">
+  <!-- Search Box -->
+  <span class="search-wrapper">
+    <mat-form-field appearance="outline">
+      <mat-label>Searh Movie</mat-label>
+      <mat-icon matPrefix class="grey-icon">search</mat-icon>
+      <input matInput formControlName="search">
+    </mat-form-field>
+  </span>
+
+  <!-- Genre Filter -->
+  <span>
+    <mat-form-field appearance="outline">
+      <mat-label>Genre</mat-label>
+      <mat-select (selectionChange)="setFilter($event)" multiple>
+        <mat-option *ngFor="let genre of genres" [value]="genre">{{genre}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </span>
+
+  <!-- Sort -->
+  <span>
+    <mat-form-field appearance="outline">
+      <mat-label>Sort</mat-label>
+      <mat-select (selectionChange)="setSort($event)">
+        <mat-option *ngFor="let sort of sortValue" [value]="sort">{{sort.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </span>
+</div>
+
+<app-movie [filter]="filter" [sort]="sort" [q]='q'></app-movie>
+
+<div>
+  <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</div>
+
+
+<!-- Add Content Here -->
+<!-- </mat-sidenav-content>
+</mat-sidenav-container> -->
