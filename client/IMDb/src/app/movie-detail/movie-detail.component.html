@@ -1,82 +1,181 @@
-<h1 mat-dialog-title>{{movie.name}}</h1>
-<div *ngIf='!isAdmin' class="example-card" mat-dialog-content>
-    <img src={{movie.poster}} alt="Photo of {{movie.name}}">
-    <div class="info">
-        <mat-list role="list">
-            <mat-list-item role="listitem">
-                <span>Genre: </span>
-                <span class="value">{{movie.genre}}</span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>Name: </span>
-                <span class="value">{{movie.name}}</span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>Director: </span>
-                <span class="value">{{movie.director}}</span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>IMDB Score: </span>
-                <span class="value">{{movie.imdb_score}}</span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>Popularity: </span>
-                <span class="value">{{movie.popularity}}</span>
-            </mat-list-item>
-        </mat-list>
+<div *ngIf='type == "detail"'>
+    <h1 mat-dialog-title>{{movie.name}}</h1>
+    <div *ngIf='!isAdmin' class="example-card" mat-dialog-content>
+        <img src={{movie.poster}} alt="Photo of {{movie.name}}">
+        <div class="info">
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <span>Genre: </span>
+                    <span class="value">{{movie.genre}}</span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Name: </span>
+                    <span class="value">{{movie.name}}</span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Director: </span>
+                    <span class="value">{{movie.director}}</span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>IMDB Score: </span>
+                    <span class="value">{{movie.imdb_score}}</span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Popularity: </span>
+                    <span class="value">{{movie.popularity}}</span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+    <div *ngIf='isAdmin' class="example-card" mat-dialog-content>
+        <img src={{movie.poster}} alt="Photo of {{movie.name}}">
+        <div class="info" [formGroup]="controller">
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <span>Genress: </span>
+                    <span class="value">
+                        <mat-form-field appearance="fill">
+                            <mat-select formControlName="genreControl" multiple>
+                                <mat-option *ngFor="let genre of genres" [value]="genre">{{genre}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Name: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput disabled value={{movie.name}}>
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Director: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput formControlName="directorControl" value={{movie.director}}>
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>IMDB Score: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput formControlName="imdbControl" value={{movie.imdb_score}}>
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Popularity: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput formControlName="popularityControl" value={{movie.popularity}}>
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+    <div *ngIf='isAdmin' mat-dialog-actions align="end">
+        <button *ngIf='isAdmin' mat-button [mat-dialog-close]="true" (click)="deleteMovie()">Delete</button>
+        <button *ngIf='isAdmin' mat-button [mat-dialog-close]="true" (click)="updateMovie()">Update</button>
+        <button mat-button mat-dialog-close>Close</button>
     </div>
 </div>
-<div *ngIf='isAdmin' class="example-card" mat-dialog-content>
-    <img src={{movie.poster}} alt="Photo of {{movie.name}}">
-    <div class="info" [formGroup]="controller">
-        <mat-list role="list">
-            <mat-list-item role="listitem">
-                <span>Genress: </span>
-                <span class="value">
-                    <mat-form-field appearance="fill">
-                        <mat-select formControlName="genreControl" multiple>
-                          <mat-option *ngFor="let genre of genres" [value]="genre">{{genre}}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                </span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>Name: </span>
-                <span class="value">
-                    <mat-form-field appearance="legacy">
-                        <input matInput disabled value={{movie.name}}>
-                    </mat-form-field>
-                </span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>Director: </span>
-                <span class="value">
-                    <mat-form-field appearance="legacy">
-                        <input matInput  formControlName="directorControl" value={{movie.director}}>
-                    </mat-form-field>
-                </span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>IMDB Score: </span>
-                <span class="value">
-                    <mat-form-field appearance="legacy">
-                        <input matInput formControlName="imdbControl" value={{movie.imdb_score}}>
-                    </mat-form-field>
-                </span>
-            </mat-list-item>
-            <mat-list-item role="listitem">
-                <span>Popularity: </span>
-                <span class="value">
-                    <mat-form-field appearance="legacy" >
-                        <input matInput formControlName="popularityControl" value={{movie.popularity}}>
-                    </mat-form-field>
-                </span>
-            </mat-list-item>
-        </mat-list>
+
+<div *ngIf='type === "genre"'>
+    <h1 mat-dialog-title>Genre</h1>
+    <div mat-dialog-content>
+        <mat-form-field appearance="outline">
+            <input matInput #genre type="text" name="genre" placeholder="Add Genre">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
+        <button mat-button [mat-dialog-close]="true" (click)="addGenre(genre.value)">Add</button>
     </div>
 </div>
-<div mat-dialog-actions align="end">
-    <button *ngIf='isAdmin' mat-button [mat-dialog-close]="true" (click)="deleteMovie()">Delete</button>
-    <button *ngIf='isAdmin' mat-button [mat-dialog-close]="true" (click)="updateMovie()">Update</button>
-    <button mat-button mat-dialog-close>Close</button>
+
+
+<div *ngIf='type === "movie"'>
+    <h1 mat-dialog-title>Movie</h1>
+    <div class="example-card" mat-dialog-content>
+        <div class="info" [formGroup]="controller">
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <span>Genre: </span>
+                    <span class="value">
+                        <mat-form-field appearance="fill">
+                            <mat-select formControlName="genreControl" multiple>
+                                <mat-option *ngFor="let genre of genres" [value]="genre">{{genre}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Name: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput formControlName="nameControl">
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Director: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput formControlName="directorControl">
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>IMDB Score: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput formControlName="imdbControl">
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+                <mat-list-item role="listitem">
+                    <span>Popularity: </span>
+                    <span class="value">
+                        <mat-form-field appearance="legacy">
+                            <input matInput formControlName="popularityControl">
+                        </mat-form-field>
+                    </span>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
+        <button mat-button [mat-dialog-close]="true" (click)="addMovie()">Add</button>
+    </div>
+</div>
+
+<div *ngIf='type === "login"'>
+    <h1 mat-dialog-title>Login</h1>
+    <div mat-dialog-content>
+        <div>
+            <span>Username: </span>
+            <mat-form-field appearance="outline">
+                <input matInput #user type="text" name="user" placeholder="Username">
+            </mat-form-field>
+        </div>
+        <div>
+            <span>Password: </span>
+            <mat-form-field appearance="outline">
+                <mat-label>Enter your password</mat-label>
+                <input matInput #pass [type]="hide ? 'password' : 'text'">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Close</button>
+        <button mat-button [mat-dialog-close]="true" (click)="login(user.value,pass.value)">Login</button>
+    </div>
 </div>

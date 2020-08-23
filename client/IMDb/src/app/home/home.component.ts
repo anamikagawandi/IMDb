@@ -1,10 +1,13 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 // import { Observable, Subscription } from 'rxjs/Rx';
 import { map, shareReplay, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ApiService } from '../service/api.service';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { MovieDetailComponent } from '../movie-detail/movie-detail.component';
+import { MatPaginator } from '@angular/material/paginator';
 
 export interface SortValue {
   sort: string;
@@ -55,11 +58,14 @@ export class HomeComponent implements OnInit {
   genres: any = null;
   filter: any = null;
   sort: any = null;
+  limit: any = 8;
+  page: any = 1;
   q: any = null;
   isAdmin = false;
   toggleCard: boolean = false;
   controller: FormGroup;
   right = "0rem";
+  resultsLength = null;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -67,7 +73,7 @@ export class HomeComponent implements OnInit {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private _apiService: ApiService, fb: FormBuilder) {
+  constructor(private breakpointObserver: BreakpointObserver, private _apiService: ApiService, fb: FormBuilder, private dialog: MatDialog) {
     this.controller = fb.group({
       search: new FormControl()
     });
@@ -112,5 +118,39 @@ export class HomeComponent implements OnInit {
   logout(){
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    window.location.reload();
+  }
+
+
+  openDialog(type) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = type==='genre' ?"30%" :"50%";
+    dialogConfig.height = type==='genre' ?"35%" :"70%";
+    dialogConfig.data = {type:type};
+
+    if(type==='login'){
+      dialogConfig.width = "30%";
+      dialogConfig.height = "50%";
+    }
+
+    this.dialog.open(MovieDetailComponent, dialogConfig);
+  }
+
+  updateCount(event){
+    console.log("In update count",event);
+    this.resultsLength = event;
+  }
+
+  goToPage(event){
+    console.log(event)
+    this.limit = event.pageSize;
+    this.page = event.pageIndex+1;
+    // this._apiService.getData("movie", this.filter, null, null, 500, 1, this.q).subscribe(data => {
+    //   this.resultsLength = data["count"]
+    // }, err => {
+    // })
   }
 }

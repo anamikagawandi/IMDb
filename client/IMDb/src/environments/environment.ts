@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: "http://localhost:3000/imdb/",
+  baseUrl: "http://localhost:3000/imdb",
   api: "15d2ea6d0dc1d476efbca3eba2b9bbfb"
 };
 

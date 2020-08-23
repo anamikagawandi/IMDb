@@ -42,6 +42,26 @@ const getDocuments = async (db, collection, filter, sort, limit, skip, q) => {
     }
 }
 
+const getCount = async (db, collection, filter, q) => {
+    try {
+        if (filter && q) {
+            let regex = new RegExp(".*" + q + ".*", "i");
+            let query = { $or: [{ name: regex }, { director: regex }] };
+            return db.collection(collection).find({ $and: [query, filter, { is_active: true }] }).count();
+        } else if(filter)
+            return db.collection(collection).find({ $and: [filter, { is_active: true }] }).count();
+        else if(q){
+            let regex = new RegExp(".*" + q + ".*", "i");
+            let query = { $or: [{ name: regex }, { director: regex }] };
+            return db.collection(collection).find({ $and: [query, { is_active: true }] }).count();
+        }
+        else
+            return db.collection(collection).find({ is_active: true }).count();
+    } catch (err) {
+        throw new Error(`Something went wrong: ${err}`);
+    }
+}
+
 // const search = async (db, collection, q) => {
 //     try {
 //         if (q) {
@@ -131,6 +151,7 @@ const ifExists = async (db, collection, filter) => {
 module.exports = {
     getDB,
     getDocuments,
+    getCount,
     // search,
     getDocumentById,
     insertDocuments,

@@ -34,6 +34,29 @@ const listMovies = (services) => {
     };
 }
 
+
+const getCount = (services) => {
+    return async (req, res, next) => {
+        try {
+            let filterObj = null;
+            if (req.query && req.query.filter  && req.query.filter !== "all") {
+                filterObj = {
+                    genre: { $all: [] }
+                };
+                filterObj.genre.$all = req.query.filter.split(",")
+            }
+            let search = null;
+            if(req.query && req.query.q && req.query.q !== "null")
+                search = req.query.q;
+
+            let result = await mongodb.getCount(services.db, collection, filterObj, search);
+            res.status(200).json({ "count": result })
+        } catch (err) {
+            console.error(err);
+        }
+    };
+}
+
 // const search = (services) => {
 //     return async (req, res, next) => {
 //         try {
@@ -105,6 +128,7 @@ const deleteMovie = (services) => {
 
 module.exports = {
     listMovies,
+    getCount,
     // search,
     getMovieDetails,
     addMovie,

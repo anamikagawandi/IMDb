@@ -8,6 +8,7 @@ module.exports = (services) => {
 
     // routes.get("/search", movie.search(services));
     routes.get("/", movie.listMovies(services));
+    routes.get("/count", movie.getCount(services));
     routes.get("/:id", movie.getMovieDetails(services));
     //Authotized, need an auth middleware
     routes.post("/", auth.verifyToken(), movie.addMovie(services));

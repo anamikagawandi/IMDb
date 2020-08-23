@@ -3,7 +3,7 @@
   <span>IMDb</span>
   <span class="example-spacer"></span>
   
-  <button *ngIf='!isAdmin' mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+  <button *ngIf='!isAdmin' (click)="openDialog('login')" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
     <i class="material-icons md-24">login</i>
   </button>
 
@@ -15,9 +15,9 @@
   <mat-card (click)="toggle()" *ngIf='toggleCard' class="example-card">
     <mat-card-content>
       <mat-list role="list">
-        <mat-list-item role="listitem">Add Movie</mat-list-item>
+        <mat-list-item role="listitem" (click)="openDialog('movie')">Add Movie</mat-list-item>
         <mat-divider></mat-divider>
-        <mat-list-item role="listitem">Add Genre</mat-list-item>
+        <mat-list-item role="listitem" (click)="openDialog('genre')">Add Genre</mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item role="listitem" (click)="logout()">Logout</mat-list-item>
       </mat-list>
@@ -28,11 +28,6 @@
 
 <!-- Utility -->
 <div class="utility">
-
-  <!-- <mat-form-field *ngIf='isAdmin'  appearance="outline">
-    <input matInput #genre type="text" name="genre" placeholder="Add Genre">
-</mat-form-field>
-<button *ngIf='isAdmin' mat-button (click)="addGenre(genre.value)">Add Genre</button> -->
 
   <!-- Search Box -->
   <span class="search-wrapper">
@@ -64,10 +59,10 @@
   </span>
 </div>
 
-<app-movie [filter]="filter" [sort]="sort" [q]='q'></app-movie>
+<app-movie (count)='updateCount($event)' [filter]="filter" [sort]="sort" [q]='q' [limit]='limit' [page]='page'></app-movie>
 
 <div>
-  <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+  <mat-paginator (page)="goToPage($event)" [length]="resultsLength" [pageSize]="8" [pageSizeOptions]="[8, 16, 32, 64]">
   </mat-paginator>
 </div>
 </div>

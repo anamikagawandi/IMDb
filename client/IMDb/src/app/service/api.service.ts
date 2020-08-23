@@ -15,6 +15,7 @@ export class ApiService {
    * @returns {Observable}
    */
   getData(type, filter, sort, sortType, limit, page, q) {
+    q = q ?q :"";
     filter = filter ? filter : ""
     sortType = sortType ? sortType : 1
     limit = limit ? limit : 8;
@@ -22,9 +23,30 @@ export class ApiService {
     return this._http.get(`${environment.baseUrl}/${type}?filter=${filter}&sort=${sort}&sortType=${sortType}&limit=${limit}&page=${page}&q=${q}`)
   }
 
+  getCount(filter,q){
+    q = q ?q :"";
+    filter = filter ? filter : ""
+    let url = `${environment.baseUrl}/movie/count?filter=${filter}&q=${q}`;
+    return this._http.get(url);
+  }
+
+  getToken(user,pass){
+    let headers = new HttpHeaders().set('username', user)
+      .set('password', pass);
+    let url = `${environment.baseUrl}/user/`;
+    return this._http.get(url, { headers: headers });
+  }
+
   getMoviePoster(name) {
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${environment.api}&query=${name}`;
     return this._http.get(url)
+  }
+
+  addMovie(movie){
+    let headers = new HttpHeaders().set('user', localStorage.getItem("user"))
+      .set('token', localStorage.getItem("token"));
+    let url = `${environment.baseUrl}/movie/`;
+    return this._http.post(url, movie, { headers: headers });
   }
 
   updateMovie(id, movie) {
