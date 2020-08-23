@@ -38,5 +38,17 @@
 }
 
 .material-icons.md-24 { 
-  font-size: 24px; 
+  font-size: 30px; 
+  position: absolute;
+  top: 1rem;
+  right: 0rem;
 }
+
+.example-card{
+  width: 7rem;
+  height: 9rem;
+  z-index: 10;
+  margin-top: 14rem;
+  margin-right: 1rem;
+}
+

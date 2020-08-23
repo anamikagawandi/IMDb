@@ -56,7 +56,10 @@ export class HomeComponent implements OnInit {
   filter: any = null;
   sort: any = null;
   q: any = null;
+  isAdmin = false;
+  toggleCard: boolean = false;
   controller: FormGroup;
+  right = "0rem";
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -71,6 +74,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isAdmin = localStorage.getItem('token') ? true : false;
     this.getGenre();
     this.controller.get('search').valueChanges.pipe(
       debounceTime(500),
@@ -97,5 +101,16 @@ export class HomeComponent implements OnInit {
   setSort(event) {
     console.log("in setting filter", event.value);
     this.sort = event.value;
+  }
+
+  toggle(){
+    this.toggleCard = !this.toggleCard;
+    console.log(this.toggleCard)
+    this.right = this.toggleCard ? "-10rem" :"0rem"
+  }
+
+  logout(){
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   }
 }
