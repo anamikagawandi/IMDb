@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 // import { Observable, Subscription } from 'rxjs/Rx';
 import { map, shareReplay, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import {FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ApiService } from '../service/api.service';
 
 export interface SortValue {
@@ -19,7 +19,7 @@ export interface SortValue {
 })
 export class HomeComponent implements OnInit {
 
-  sortValue: SortValue[]= [
+  sortValue: SortValue[] = [
     {
       sort: "name",
       sortType: 1,
@@ -56,11 +56,7 @@ export class HomeComponent implements OnInit {
   filter: any = null;
   sort: any = null;
   q: any = null;
-
-  // emitEventToChild() {
-  //   this.q.next("Steven");
-  // }
-  // controller = null;
+  controller: FormGroup;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -68,36 +64,37 @@ export class HomeComponent implements OnInit {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver,private _apiService: ApiService) {
-    // this.controller = new FormGroup({
-    //   search: new FormControl(null)
-    // })
+  constructor(private breakpointObserver: BreakpointObserver, private _apiService: ApiService, fb: FormBuilder) {
+    this.controller = fb.group({
+      search: new FormControl()
+    });
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.getGenre();
-    // this.controller.get('search').valueChanges.pipe(
-    //   debounceTime(500),
-    //   distinctUntilChanged())
-    //   .subscribe(val => {
-    //     this.q.emit(val);;
-    //   });
+    this.controller.get('search').valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged())
+      .subscribe(val => {
+        console.log("Values change", val)
+        this.q = val;
+      });
   }
 
   getGenre() {
-    this._apiService.getData("genre",null,null,null,null,null,null).subscribe(data => {
+    this._apiService.getData("genre", null, null, null, null, null, null).subscribe(data => {
       console.log("in genre", data)
       this.genres = data["list"]
     }, err => {
     })
   }
 
-  setFilter(event){
+  setFilter(event) {
     console.log("in setting filter", event.value)
     this.filter = event.value;
   }
 
-  setSort(event){
+  setSort(event) {
     console.log("in setting filter", event.value);
     this.sort = event.value;
   }

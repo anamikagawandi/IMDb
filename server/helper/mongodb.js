@@ -42,17 +42,17 @@ const getDocuments = async (db, collection, filter, sort, limit, skip, q) => {
     }
 }
 
-const search = async (db, collection, q) => {
-    try {
-        if (q) {
-            let regex = new RegExp(".*" + q + ".*", "i");
-            console.log(regex)
-            return db.collection(collection).find({ $or: [{ name: regex }, { director: regex }] }).toArray();
-        }
-    } catch (err) {
-        throw new Error(`Something went wrong: ${err}`);
-    }
-}
+// const search = async (db, collection, q) => {
+//     try {
+//         if (q) {
+//             let regex = new RegExp(".*" + q + ".*", "i");
+//             console.log(regex)
+//             return db.collection(collection).find({ $or: [{ name: regex }, { director: regex }] }).toArray();
+//         }
+//     } catch (err) {
+//         throw new Error(`Something went wrong: ${err}`);
+//     }
+// }
 
 const getDocumentById = async (db, collection, id) => {
     try {
@@ -131,7 +131,7 @@ const ifExists = async (db, collection, filter) => {
 module.exports = {
     getDB,
     getDocuments,
-    search,
+    // search,
     getDocumentById,
     insertDocuments,
     updateDocument,

@@ -6,7 +6,7 @@ const auth = require("../../../middleware/verifyToken")
 
 module.exports = (services) => {
 
-    routes.get("/search", movie.search(services));
+    // routes.get("/search", movie.search(services));
     routes.get("/", movie.listMovies(services));
     routes.get("/:id", movie.getMovieDetails(services));
     //Authotized, need an auth middleware

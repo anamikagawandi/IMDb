@@ -34,18 +34,18 @@ const listMovies = (services) => {
     };
 }
 
-const search = (services) => {
-    return async (req, res, next) => {
-        try {
-            if(req.query && req.query.q){
-                let result = await mongodb.search(services.db, collection, req.query.q, sort, limit, skip);
-                res.status(200).json({ "count": result.length, "list": result })
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    };
-}
+// const search = (services) => {
+//     return async (req, res, next) => {
+//         try {
+//             if(req.query && req.query.q){
+//                 let result = await mongodb.search(services.db, collection, req.query.q, sort, limit, skip);
+//                 res.status(200).json({ "count": result.length, "list": result })
+//             }
+//         } catch (err) {
+//             console.error(err);
+//         }
+//     };
+// }
 
 const getMovieDetails = (services) => {
     return async (req, res, next) => {
@@ -105,7 +105,7 @@ const deleteMovie = (services) => {
 
 module.exports = {
     listMovies,
-    search,
+    // search,
     getMovieDetails,
     addMovie,
     updateMovie,

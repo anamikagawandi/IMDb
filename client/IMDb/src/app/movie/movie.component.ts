@@ -1,8 +1,5 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { ApiService } from '../service/api.service'
-import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-movie',
@@ -14,9 +11,14 @@ export class MovieComponent implements OnInit, OnChanges {
   @Input() filter: string = null;
   @Input() sort: Object = null;
   @Input() q: string = null;
-
+  searchChanges: string
   constructor(private _apiService: ApiService) {
 
+  }
+
+  onSearchChange($event: string){
+    this.searchChanges = $event;
+    console.log(this.searchChanges)
   }
 
   getMovies(type, filter, sort, sortType, limit, page, q) {
@@ -40,13 +42,5 @@ export class MovieComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.getMovies("movie", null, null, null, 8, 1, this.q);
-    // this.sub = this.q.subscribe((val) => {
-    //   console.log(val)
-    // });
   }
-
-
-  // ngOnDestroy() {
-  //   this.sub.unsubscribe();
-  // }
 }

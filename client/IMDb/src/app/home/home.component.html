@@ -1,14 +1,14 @@
 <mat-toolbar color="primary">
-  <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
-    *ngIf="isHandset$ | async">
-    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-  </button>
   <span>IMDb</span>
+  <span class="example-spacer"></span>
+  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+    <i class="material-icons md-24">login</i>
+  </button>
 </mat-toolbar>
 <div class="utility">
   <!-- Search Box -->
   <span class="search-wrapper">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" [formGroup]="controller">
       <mat-label>Searh Movie</mat-label>
       <mat-icon matPrefix class="grey-icon">search</mat-icon>
       <input matInput formControlName="search">
