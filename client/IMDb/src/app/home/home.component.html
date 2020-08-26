@@ -1,0 +1,72 @@
+<div>
+  <mat-toolbar color="primary">
+  <span>IMDb</span>
+  <span class="example-spacer"></span>
+  
+  <button *ngIf='!isAdmin' (click)="openDialog('login')" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+    <i class="material-icons md-24">login</i>
+  </button>
+
+  <span *ngIf='isAdmin'>
+    <button (click)="toggle()" mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+      <i class="material-icons md-24" [style.right]="right">emoji_emotions</i>
+    </button>
+  </span>
+  <mat-card (click)="toggle()" *ngIf='toggleCard' class="example-card">
+    <mat-card-content>
+      <mat-list role="list">
+        <mat-list-item role="listitem" (click)="openDialog('movie')">Add Movie</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem" (click)="openDialog('genre')">Add Genre</mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem" (click)="logout()">Logout</mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+
+</mat-toolbar>
+
+<!-- Utility -->
+<div class="utility">
+
+  <!-- Search Box -->
+  <span class="search-wrapper">
+    <mat-form-field appearance="outline" [formGroup]="controller">
+      <mat-label>Searh Movie</mat-label>
+      <mat-icon matPrefix class="grey-icon">search</mat-icon>
+      <input matInput formControlName="search">
+    </mat-form-field>
+  </span>
+
+  <!-- Genre Filter -->
+  <span>
+    <mat-form-field appearance="outline">
+      <mat-label>Genre</mat-label>
+      <mat-select (selectionChange)="setFilter($event)" multiple>
+        <mat-option *ngFor="let genre of genres" [value]="genre">{{genre}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </span>
+
+  <!-- Sort -->
+  <span>
+    <mat-form-field appearance="outline">
+      <mat-label>Sort</mat-label>
+      <mat-select (selectionChange)="setSort($event)">
+        <mat-option *ngFor="let sort of sortValue" [value]="sort">{{sort.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </span>
+</div>
+
+<app-movie (count)='updateCount($event)' [filter]="filter" [sort]="sort" [q]='q' [limit]='limit' [page]='page'></app-movie>
+
+<div>
+  <mat-paginator (page)="goToPage($event)" [length]="resultsLength" [pageSize]="8" [pageSizeOptions]="[8, 16, 32, 64]">
+  </mat-paginator>
+</div>
+</div>
+
+<!-- Add Content Here -->
+<!-- </mat-sidenav-content>
+</mat-sidenav-container> -->
