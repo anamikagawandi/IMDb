@@ -1,0 +1,28 @@
+<div class="grid-container">
+  <!-- <h1 class="mat-h1">Dashboard</h1> -->
+  <mat-grid-list cols="4" rowHeight="500px">
+    <mat-grid-tile *ngFor="let card of cards" rowHeight="500px" (click)="openDialog(card)">
+      <mat-card class="example-card">
+        <img mat-card-image src="{{card.poster}}" alt="Poster of {{card.name}}">
+        <mat-card-content>
+          <div>
+            <span>Genre: </span>
+            <span>{{card.genre}}</span>
+          </div>
+          <div>
+            <span>Name: </span>
+            <span>{{card.name}}</span>
+          </div>
+          <div>
+            <span>Director: </span>
+            <span>{{card.director}}</span>
+          </div>
+          <div>
+            <span>IMDB Score: </span>
+            <span>{{card.imdb_score}}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

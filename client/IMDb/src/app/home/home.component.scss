@@ -1,0 +1,56 @@
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+
+// For Filter
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+
+.utility{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  .search-wrapper{
+    padding-right: 5rem;
+    mat-form-field{
+      width: 26rem;
+    }
+  }
+  span:nth-child(2){
+    padding-right: 1rem;
+  }
+  span:nth-child(3){
+    padding-right: 2rem;
+  }
+}
+
+//For Toolbar
+.example-icon {
+  padding: 0 14px;
+}
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.material-icons.md-24 { 
+  font-size: 30px; 
+  position: absolute;
+  top: 1rem;
+  right: 0rem;
+}
+
+.example-card{
+  width: 7rem;
+  height: 9rem;
+  z-index: 10;
+  margin-top: 14rem;
+  margin-right: 1rem;
+}
+
+
+

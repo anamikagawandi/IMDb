@@ -6,7 +6,7 @@ const collection = "genre";
 const listGenre = (services) => {
     return async (req, res, next) => {
         try {
-            let result = await mongodb.getDocuments(services.db, collection, {is_active: true}, null, 0, 0);
+            let result = await mongodb.getDocuments(services.db, collection, {is_active: true}, null, 0, 0, null);
             let list = [];
             result.forEach(element => {
                 list.push(element.name);

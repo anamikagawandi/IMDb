@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// .mat-form-field-appearance-outline .mat-form-field-flex {
+//     position: initial;
+//   }
+
+.utility{
+	.mat-form-field-wrapper {
+		padding-top: 1rem;
+		padding-bottom: 0rem;
+	}
+}
+
+//Paginator
+// .mat-paginator-range-actions{
+// 	.mat-paginator-range-label{
+// 	  display: none;
+// 	}
+//   }
+
+//scrollbar css
+::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+	background: white;
+	border-radius: 10px;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+	background: gray;
+	border-radius: 10px;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}

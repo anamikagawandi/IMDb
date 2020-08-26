@@ -1,0 +1,32 @@
+.example-card{
+    display: flex;
+    flex-direction: row;
+    height: 18rem;
+    img{
+        max-height: 15rem;
+    }
+    min-width: fit-content;
+    .info{
+        padding-left: 2rem;
+        font-weight: 400;
+        width: 20rem;
+        mat-list{
+            font-weight: 500;
+            mat-list-item{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+    }
+}
+
+.value{
+    padding-left: 1rem;
+}
+
+//For select
+.example-additional-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+  }
