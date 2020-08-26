@@ -63,9 +63,9 @@ export class MovieDetailComponent implements OnInit {
   }
 
   addGenre(genre) {
-    console.log(genre)
+    // console.log(genre)
     this._apiService.addGenre(genre).subscribe(res => {
-      console.log(res);
+      // console.log(res);
       this.setGenre();
     }, err => {
       console.error(err)
@@ -80,9 +80,9 @@ export class MovieDetailComponent implements OnInit {
       "genre": this.controller.get('genreControl').value,
       "imdb_score": this.controller.get('imdbControl').value
     }
-    console.log(movie);
+    // console.log(movie);
     this._apiService.addMovie(movie).subscribe(res => {
-      console.log(res);
+      // console.log(res);
     }, err => {
       console.error(err);
     })
@@ -96,7 +96,7 @@ export class MovieDetailComponent implements OnInit {
       "imdb_score": this.controller.get('imdbControl').value
     }
     this._apiService.updateMovie(this.movie["_id"], movie).subscribe(res => {
-      console.log(res);
+      // console.log(res);
     }, err => {
       console.error(err);
     })
@@ -104,16 +104,16 @@ export class MovieDetailComponent implements OnInit {
 
   deleteMovie() {
     this._apiService.deleteMovie(this.movie["_id"]).subscribe(res => {
-      console.log(res);
+      // console.log(res);
     }, err => {
       console.error(err);
     })
   }
 
   login(user, pass) {
-    console.log(user, pass)
+    // console.log(user, pass)
     this._apiService.getToken(user, pass).subscribe(res => {
-      console.log(res);
+      // console.log(res);
       localStorage.setItem("user", user);
       localStorage.setItem("token", res["token"]);
       window.location.reload();

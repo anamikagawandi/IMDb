@@ -86,32 +86,32 @@ export class HomeComponent implements OnInit {
       debounceTime(500),
       distinctUntilChanged())
       .subscribe(val => {
-        console.log("Values change", val)
+        // console.log("Values change", val)
         this.q = val;
       });
   }
 
   getGenre() {
     this._apiService.getData("genre", null, null, null, null, null, null).subscribe(data => {
-      console.log("in genre", data)
+      // console.log("in genre", data)
       this.genres = data["list"]
     }, err => {
     })
   }
 
   setFilter(event) {
-    console.log("in setting filter", event.value)
+    // console.log("in setting filter", event.value)
     this.filter = event.value;
   }
 
   setSort(event) {
-    console.log("in setting filter", event.value);
+    // console.log("in setting filter", event.value);
     this.sort = event.value;
   }
 
   toggle(){
     this.toggleCard = !this.toggleCard;
-    console.log(this.toggleCard)
+    // console.log(this.toggleCard)
     this.right = this.toggleCard ? "-10rem" :"0rem"
   }
 
@@ -140,12 +140,12 @@ export class HomeComponent implements OnInit {
   }
 
   updateCount(event){
-    console.log("In update count",event);
+    // console.log("In update count",event);
     this.resultsLength = event;
   }
 
   goToPage(event){
-    console.log(event)
+    // console.log(event)
     this.limit = event.pageSize;
     this.page = event.pageIndex+1;
     // this._apiService.getData("movie", this.filter, null, null, 500, 1, this.q).subscribe(data => {

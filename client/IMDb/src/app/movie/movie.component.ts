@@ -23,12 +23,12 @@ export class MovieComponent implements OnInit, OnChanges {
 
   onSearchChange($event: string) {
     this.searchChanges = $event;
-    console.log(this.searchChanges)
+    // console.log(this.searchChanges)
   }
 
   getMovies(type, filter, sort, sortType, limit, page, q) {
     this._apiService.getData(type, filter, sort, sortType, limit, page, q).subscribe(data => {
-      console.log("in movies", data)
+      // console.log("in movies", data)
       this.cards = [];
       data["list"].forEach(element => {
         this._apiService.getMoviePoster(element["name"]).subscribe(poster => {
@@ -54,8 +54,8 @@ export class MovieComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log("Filter", this.filter);
-    console.log("Sort", this.sort);
+    // console.log("Filter", this.filter);
+    // console.log("Sort", this.sort);
 
     if (changes['filter'] || changes['sort'] || changes['q'] || changes["limit"] || changes["page"]) {
       if (this.sort)
@@ -66,7 +66,7 @@ export class MovieComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.getMovies("movie", null, null, null, this.limit, this.page, this.q);
+    // this.getMovies("movie", null, null, null, this.limit, this.page, this.q);
   }
 
   openDialog(movie) {
