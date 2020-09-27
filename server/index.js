@@ -1,26 +1,10 @@
 "use strict"
 
-const express = require("express")
-const app = express()
-const http = require("http")
-const server = http.createServer(app)
-const bodyParser = require("body-parser")
-const routes = require("./routes/v1/routes")
-const config = require("./config/index")
-const db = require("./helper/mongodb");
-var cors = require('cors');
+const http = require("http");
+const app = require("./app");
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors())
-const services = {
-    config: config
-}
-
-db.getDB().then(db => {
-    services["db"] = db;
-    app.use("/imdb", routes(services))
-
+app.getApp().then(res=>{
+    const server = http.createServer(res);
     server.listen(3000, (err) => {
         if (err) {
             console.log(err);
@@ -28,6 +12,4 @@ db.getDB().then(db => {
             console.log("Server started")
         }
     })
-
-}
-).catch(err => console.error(err));
+})
